@@ -1,0 +1,40 @@
+{
+    "orders": [
+        {
+            "id": 1,
+            "shopId": 1,
+            "status": "Completed",
+            "total": 95000,
+            "orderDate": "2025-10-08T08:30:00",
+            "items": [
+                {
+                    "productId": 1,
+                    "productName": "Iced Chocolate",
+                    "quantity": 1,
+                    "subtotal": 45000
+                },
+                {
+                    "productId": 2,
+                    "productName": "Milk Coffee",
+                    "quantity": 1,
+                    "subtotal": 40000
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "shopId": 1,
+            "status": "Pending",
+            "total": 50000,
+            "orderDate": "2025-10-08T09:30:00",
+            "items": [
+                {
+                    "productId": 3,
+                    "productName": "Matcha Latte",
+                    "quantity": 1,
+                    "subtotal": 50000
+                }
+            ]
+        }
+    ]
+}

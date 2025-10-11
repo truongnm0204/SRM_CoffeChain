@@ -1,0 +1,9 @@
+/ISP302_G6/nbproject/private/
+/ISP302_G6/build/
+/ISP302_G6/dist/
+
+# NetBeans/IDE files to ignore
+ISP302_G6/nbproject/build-impl.xml
+ISP302_G6/nbproject/genfiles.properties
+# Loại bỏ tất cả các tệp sao lưu tạm thời
+*~
