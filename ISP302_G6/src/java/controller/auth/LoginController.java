@@ -6,6 +6,7 @@ import service.StringUtils;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -104,10 +105,11 @@ public class LoginController extends HttpServlet {
 
         if ("success".equals(result.get(0))) {
             // Đăng nhập thành công
-            // result format: [success, message, token, userId, role]
+            // result format: [success, message, token, userId, role, shopId]
             String token = result.get(2);
             String userId = result.get(3);
             String role = result.get(4);
+            Integer shopId = Integer.valueOf(result.get(5));
 
             // Lấy thông tin user từ database
             List<String> validateResult = loginServices.validateToken(token);
@@ -116,6 +118,7 @@ public class LoginController extends HttpServlet {
                 session.setAttribute("userId", userId);
                 session.setAttribute("username", validateResult.get(2));
                 session.setAttribute("role", role);
+                session.setAttribute("shopId", shopId);
                 session.setAttribute("token", token);
                 session.setAttribute("isLoggedIn", true);
                 // Tải quyền và lưu vào session

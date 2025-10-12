@@ -2,7 +2,7 @@ package dao;
 
 import com.google.gson.*;
 import java.sql.*;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.math.BigDecimal;
 
 public class OrderSyncDAO {
@@ -28,7 +28,7 @@ public class OrderSyncDAO {
                 String externalId = o.get("id").getAsString();
                 String status = o.get("status").getAsString();
                 double total = o.get("total").getAsDouble();
-                Timestamp orderTs = Timestamp.from(OffsetDateTime.parse(o.get("orderDate").getAsString()).toInstant());
+                Timestamp orderTs = Timestamp.valueOf(LocalDateTime.parse(o.get("orderDate").getAsString()));
                 int orderId = upsertOrder(externalId, orderTs, total, status, shopId, r);
                 if (o.has("items") && o.get("items").isJsonArray()) {
                     JsonArray items = o.getAsJsonArray("items");

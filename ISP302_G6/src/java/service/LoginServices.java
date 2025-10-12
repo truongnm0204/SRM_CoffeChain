@@ -28,7 +28,7 @@ public class LoginServices {
      * @param username Tên đăng nhập
      * @param password Mật khẩu thuần
      * @return List<String>: [0]=success/error, [1]=message, [2]=token (nếu
-     * thành công), [3]=userId, [4]=userRole
+     *         thành công), [3]=userId, [4]=userRole
      */
     public List<String> login(String email, String password) {
         List<String> result = new ArrayList<>();
@@ -74,6 +74,7 @@ public class LoginServices {
         result.add(token);
         result.add(userId);
         result.add(user.getRoleSettingName()); // role mặc định
+        result.add(user.getShopID().toString());
 
         return result;
     }
@@ -83,7 +84,7 @@ public class LoginServices {
      *
      * @param username Tên đăng nhập
      * @param password Mật khẩu thuần
-     * @param email Email
+     * @param email    Email
      * @param fullName Họ tên
      * @return List<String>: [0]=success/error, [1]=message
      */
@@ -149,7 +150,7 @@ public class LoginServices {
      *
      * @param token JWT token
      * @return List<String>: Success=[0]=success, [1]=userId, [2]=username,
-     * [3]=role; Error=[0]=error, [1]=message
+     *         [3]=role; Error=[0]=error, [1]=message
      */
     public List<String> validateToken(String token) {
         List<String> result = new ArrayList<>();
@@ -204,7 +205,7 @@ public class LoginServices {
     /**
      * Đổi mật khẩu
      *
-     * @param userId ID người dùng
+     * @param userId      ID người dùng
      * @param oldPassword Mật khẩu cũ
      * @param newPassword Mật khẩu mới
      * @return List<String>: [0]=success/error, [1]=message
@@ -261,7 +262,7 @@ public class LoginServices {
      *
      * @param token Token cũ
      * @return List<String>: Success=[0]=success, [1]=newToken; Error=[0]=error,
-     * [1]=message
+     *         [1]=message
      */
     public List<String> refreshToken(String token) {
         List<String> result = new ArrayList<>();

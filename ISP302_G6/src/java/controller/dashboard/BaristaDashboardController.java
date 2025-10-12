@@ -18,38 +18,39 @@ import java.util.List;
 /**
  * Controller cho Barista Dashboard
  */
-@WebServlet(name = "BaristaDashboardController", urlPatterns = {"/dashboard/barista"})
+@WebServlet(name = "BaristaDashboardController", urlPatterns = { "/dashboard/barista" })
 public class BaristaDashboardController extends HttpServlet {
-    
+
     private OrderDAO orderDAO;
     private ProductDAO productDAO;
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
         this.orderDAO = new OrderDAO();
         this.productDAO = new ProductDAO();
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession(false);
-        
+
         // Kiểm tra đăng nhập
         if (session == null || session.getAttribute("isLoggedIn") == null) {
             response.sendRedirect(request.getContextPath() + "/auth/login");
             return;
         }
-        
+
         String role = (String) session.getAttribute("role");
         String userId = (String) session.getAttribute("userId");
-        
+        Integer shopId = (Integer) session.getAttribute("shopId");
+
         try {
             // Lấy thống kê đơn hàng
-            List<Order> allOrders = orderDAO.getAllOrders();
-            
+            List<Order> allOrders = orderDAO.getOrdersByShopId(shopId);
+
             // Đếm số đơn theo trạng thái
             long totalOrders = allOrders.size();
             long pendingOrders = allOrders.stream()
@@ -61,21 +62,21 @@ public class BaristaDashboardController extends HttpServlet {
             long completedOrders = allOrders.stream()
                     .filter(o -> "Completed".equals(o.getStatus()))
                     .count();
-            
+
             // Tính tổng doanh thu từ đơn hoàn thành
             double totalRevenue = allOrders.stream()
                     .filter(o -> "Completed".equals(o.getStatus()))
                     .mapToDouble(Order::getTotalAmount)
                     .sum();
-            
+
             // Lấy 5 đơn hàng gần nhất
-            List<Order> recentOrders = allOrders.size() > 5 
-                    ? allOrders.subList(0, 5) 
+            List<Order> recentOrders = allOrders.size() > 5
+                    ? allOrders.subList(0, 5)
                     : allOrders;
-            
+
             // Lấy danh sách sản phẩm
             List<Product> products = productDAO.getAllProducts();
-            
+
             // Set attributes
             request.setAttribute("totalOrders", totalOrders);
             request.setAttribute("pendingOrders", pendingOrders);
@@ -86,7 +87,7 @@ public class BaristaDashboardController extends HttpServlet {
             request.setAttribute("products", products);
             request.setAttribute("userRole", role);
             request.setAttribute("userName", session.getAttribute("username"));
-            
+
             // Forward đến view tương ứng với role
             if ("Barista".equalsIgnoreCase(role)) {
                 request.getRequestDispatcher("/view/dashboard/barista-dashboard.jsp").forward(request, response);
@@ -94,7 +95,7 @@ public class BaristaDashboardController extends HttpServlet {
                 // Có thể tạo dashboard khác cho các role khác
                 request.getRequestDispatcher("/view/trangchu/index.jsp").forward(request, response);
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "Không thể tải dashboard: " + e.getMessage());
@@ -102,4 +103,3 @@ public class BaristaDashboardController extends HttpServlet {
         }
     }
 }
-

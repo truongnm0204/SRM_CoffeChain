@@ -368,3 +368,28 @@ VALUES
 (1,'LOGIN','User',1,'Admin đăng nhập thành công'),
 (3,'CREATE','Order',1,'Barista tạo đơn hàng #1'),
 (3,'CREATE','Order',2,'Barista tạo đơn hàng #2');
+
+-- =============================================================================
+-- MIGRATIONS FOR POS INTEGRATION
+-- =============================================================================
+
+-- Step 1: Add columns to 'shop' table for POS configuration and token storage
+ALTER TABLE shop 
+  ADD COLUMN apiendpoint VARCHAR(255),
+  ADD COLUMN pos_auth_url VARCHAR(255),
+  ADD COLUMN client_id VARCHAR(100),
+  ADD COLUMN client_secret VARCHAR(200),
+  ADD COLUMN pos_token TEXT,
+  ADD COLUMN pos_token_exp TIMESTAMP;
+
+-- Step 2: Add columns to 'orders' table to track POS orders and prevent duplicates
+ALTER TABLE orders ADD COLUMN externalorderid VARCHAR(100) UNIQUE;
+ALTER TABLE orders ADD COLUMN source VARCHAR(20) DEFAULT 'POS';
+
+-- Step 3: Update the sample shop with the correct POS server details
+UPDATE shop
+SET apiendpoint   = 'http://localhost:4000/',
+    pos_auth_url  = 'http://localhost:4000/auth/login',
+    client_id     = 'warehouse_system',
+    client_secret = 'abc123'
+WHERE shopid = 1;
