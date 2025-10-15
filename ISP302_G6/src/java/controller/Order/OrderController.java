@@ -1,4 +1,4 @@
-package controller.Order;
+package controller.order;
 
 import dao.OrderDAO;
 import dao.ProductDAO;
